@@ -1,0 +1,140 @@
+/* Podstawowe style */
+:root {
+  --primary-color: #00fff7;
+  --secondary-color: #00ccff;
+  --accent-color: #ff416c;
+  --enemy-color: #ff3300;
+  --health-color: #00ff00;
+  --coin-color: #ffd700;
+}
+
+/* Font */
+@font-face {
+  font-family: 'Chakra Petch';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&display=swap');
+}
+
+.font-game {
+  font-family: 'Chakra Petch', sans-serif;
+}
+
+/* Świecące efekty */
+.glow-cyan {
+  text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+}
+
+.glow-red {
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+}
+
+.glow-yellow {
+  text-shadow: 0 0 5px var(--coin-color), 0 0 10px var(--coin-color);
+}
+
+/* Niestandardowe komponenty */
+.upgrade-option {
+  padding: 12px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 220px;
+}
+
+.upgrade-option:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 247, 0.3);
+}
+
+#next-wave {
+  padding: 15px 30px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  background: rgba(0, 255, 0, 0.2);
+  border: 1px solid rgba(0, 255, 0, 0.4);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* Set transform origin to center to ensure scaling happens from center */
+  transform-origin: center center;
+  /* Added text alignment for better centering */
+  text-align: center;
+  /* Add width for consistency */
+  min-width: 200px;
+  /* Fixed position with absolute centering */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#next-wave:hover {
+  background: rgba(0, 255, 0, 0.3);
+  /* Scale without changing position by applying the scale only */
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+/* Status message style */
+#status {
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px #ffffff;
+  display: inline-block;
+  opacity: 0;
+}
+
+#status.visible {
+  opacity: 1;
+  animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Animacje */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Responsywność */
+@media (max-width: 640px) {
+  #info h1 {
+    font-size: 1.5rem;
+  }
+  
+  #info p {
+    font-size: 0.875rem;
+  }
+  
+  #health-bar {
+    width: 150px;
+  }
+  
+  .upgrade-option {
+    width: 180px;
+  }
+}

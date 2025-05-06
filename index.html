@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini DOOM: Ulepszenia</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles-css.css">
+</head>
+<body class="bg-black overflow-hidden m-0 font-game">
+  <div class="fixed top-0 left-0 w-full h-full z-0">
+    <canvas id="game" class="block w-full h-full bg-gray-900"></canvas>
+  </div>
+
+  <div id="ui-container" class="fixed top-0 left-0 w-full h-full pointer-events-none">
+    <!-- HUD -->
+    <div id="hud" class="w-full h-full">
+      <!-- Nagłówek gry -->
+      <div id="info" class="absolute top-4 left-1/2 transform -translate-x-1/2 text-center z-10">
+        <h1 class="text-3xl m-0 text-cyan-400 glow-cyan">Mini DOOM: Ulepszenia</h1>
+        <!-- Changed color from yellow to bright pink for better visibility -->
+        <p class="text-pink-500 m-1 font-bold">W/A/S/D - Ruch | Mysz - Celowanie | Klik - Strzał</p>
+      </div>
+
+      <!-- Move status to its own container below wave display -->
+      <div id="status-container" class="absolute top-36 left-1/2 transform -translate-x-1/2 text-center z-10">
+        <p id="status" class="px-4 py-2 bg-black bg-opacity-50 rounded-lg text-white font-bold m-1">Wczytywanie...</p>
+      </div>
+
+      <!-- Wyświetlacz fali -->
+      <div id="wave-display" class="absolute top-24 left-1/2 transform -translate-x-1/2 text-2xl text-cyan-400 glow-cyan z-10">
+        Fala: 1
+      </div>
+
+      <!-- Pasek zdrowia -->
+      <div class="absolute top-32 left-4 z-10">
+        <div class="flex items-center">
+          <svg class="w-8 h-8 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+          </svg>
+          <div id="health-bar" class="w-64 h-6 bg-gray-800 bg-opacity-50 border border-white rounded-full overflow-hidden">
+            <div id="health-fill" class="h-full w-full bg-gradient-to-r from-red-600 to-red-400"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monety -->
+      <div class="absolute top-32 right-4 z-10 flex items-center">
+        <div id="coin-text" class="text-yellow-400 text-xl glow-yellow flex items-center">
+          <svg class="w-6 h-6 mr-2 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+          </svg>
+          Monety: 0
+        </div>
+      </div>
+
+      <!-- Wynik -->
+      <div id="score-display" class="absolute top-4 left-4 z-10 text-xl text-cyan-400 glow-cyan">
+        Wynik: 0
+      </div>
+    </div>
+
+    <!-- Ulepszenia -->
+    <div id="upgrade-container" class="hidden absolute left-4 top-48 flex flex-col gap-4 z-20">
+      <div class="upgrade-option pointer-events-auto" id="upgrade1">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path>
+          </svg>
+          Większe pociski
+          <span class="ml-auto text-yellow-400">10</span>
+        </div>
+      </div>
+      <div class="upgrade-option pointer-events-auto" id="upgrade2">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Więcej pocisków
+          <span class="ml-auto text-yellow-400">15</span>
+        </div>
+      </div>
+      <div class="upgrade-option pointer-events-auto" id="upgrade3">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>
+          </svg>
+          Więcej obrażeń
+          <span class="ml-auto text-yellow-400">15</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Przycisk następnej fali -->
+    <div id="next-wave" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+      Następna fala
+    </div>
+
+    <!-- Ekran końca gry -->
+    <div id="game-over-screen" class="hidden fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-30">
+      <h2 class="text-4xl text-red-500 glow-red mb-4 animate__animated animate__pulse animate__infinite">GAME OVER</h2>
+      <p id="final-score" class="text-2xl text-white mb-8">Wynik: 0</p>
+      <button id="restart-button" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 pointer-events-auto">
+        Zagraj ponownie
+      </button>
+    </div>
+  </div>
+
+  <script src="game-js.js"></script>
+</body>
+</html>
